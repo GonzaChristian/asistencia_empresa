@@ -28,12 +28,10 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtAula = new javax.swing.JTextField();
         txtID = new javax.swing.JTextField();
-        txtCodigo = new javax.swing.JTextField();
+        txtDNI = new javax.swing.JTextField();
         txtNombres = new javax.swing.JTextField();
         txtApellidos = new javax.swing.JTextField();
-        txtGrado = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEstudiantes = new javax.swing.JTable();
         btnNuevoEstudiante = new javax.swing.JButton();
@@ -41,6 +39,10 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
         btnLimpiarEstudiante = new javax.swing.JButton();
         btnEliminarEstudiante = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        cmbCarrera = new javax.swing.JComboBox<>();
+        cmbTurno = new javax.swing.JComboBox<>();
+        cmbCiclo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -70,30 +72,27 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("ID:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("DNI:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Nombres:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 300, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Apellidos:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 140, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 310, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Carrera:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 220, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 130, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setText("Ciclo:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, -1, -1));
-
-        txtAula.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, 180, -1));
+        jLabel7.setText("Turno:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 250, -1, -1));
 
         txtID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtID.addActionListener(new java.awt.event.ActionListener() {
@@ -101,36 +100,37 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
                 txtIDActionPerformed(evt);
             }
         });
-        getContentPane().add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, 180, -1));
+        getContentPane().add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, 180, -1));
 
-        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, 180, -1));
+        txtDNI.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 190, 180, -1));
 
         txtNombres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, 180, -1));
+        getContentPane().add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, 180, -1));
 
         txtApellidos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 180, -1));
-
-        txtGrado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 180, -1));
+        getContentPane().add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 180, -1));
 
         tablaEstudiantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo"
+                "ID", "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Turno"
             }
         ));
         jScrollPane1.setViewportView(tablaEstudiantes);
         if (tablaEstudiantes.getColumnModel().getColumnCount() > 0) {
+            tablaEstudiantes.getColumnModel().getColumn(0).setResizable(false);
+            tablaEstudiantes.getColumnModel().getColumn(1).setResizable(false);
             tablaEstudiantes.getColumnModel().getColumn(2).setResizable(false);
             tablaEstudiantes.getColumnModel().getColumn(3).setResizable(false);
             tablaEstudiantes.getColumnModel().getColumn(4).setResizable(false);
+            tablaEstudiantes.getColumnModel().getColumn(5).setResizable(false);
+            tablaEstudiantes.getColumnModel().getColumn(6).setResizable(false);
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 960, 300));
@@ -171,6 +171,19 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/estudiantesregistro_210.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 200, 250));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setText("Ciclo:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 190, -1, -1));
+
+        cmbCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computación e Informática", "Enfermería Técnica", "Cosmética Dermatológica", "Industrias Alimentarias" }));
+        getContentPane().add(cmbCarrera, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 130, 180, 30));
+
+        cmbTurno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mañana", "Noche" }));
+        getContentPane().add(cmbTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 250, 180, 30));
+
+        cmbCiclo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I", "II", "III", "IV", "V", "VI" }));
+        getContentPane().add(cmbCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, 180, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -237,7 +250,11 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
     private javax.swing.JButton btnMenuEstudiante;
     private javax.swing.JButton btnModificarEstudiante;
     private javax.swing.JButton btnNuevoEstudiante;
+    private javax.swing.JComboBox<String> cmbCarrera;
+    private javax.swing.JComboBox<String> cmbCiclo;
+    private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -250,9 +267,7 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaEstudiantes;
     private javax.swing.JTextField txtApellidos;
-    private javax.swing.JTextField txtAula;
-    private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtGrado;
+    private javax.swing.JTextField txtDNI;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtNombres;
     // End of variables declaration//GEN-END:variables

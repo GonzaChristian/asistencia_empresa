@@ -34,9 +34,15 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
         table_estudiantes = new javax.swing.JTable();
         txtBuscarEstudiantes = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        cmbFiltroEstudiantes = new javax.swing.JComboBox<>();
+        cmbTurno = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         btnMarcarAsistencia = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jSpinnerFecha = new javax.swing.JSpinner();
+        cmbCarrera = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cmbCiclo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -66,13 +72,13 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
 
         table_estudiantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Estado"
+                "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Turno", "Estado"
             }
         ));
         jScrollPane1.setViewportView(table_estudiantes);
@@ -83,26 +89,27 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
             table_estudiantes.getColumnModel().getColumn(3).setResizable(false);
             table_estudiantes.getColumnModel().getColumn(4).setResizable(false);
             table_estudiantes.getColumnModel().getColumn(5).setResizable(false);
+            table_estudiantes.getColumnModel().getColumn(6).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 950, 440));
-        getContentPane().add(txtBuscarEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 390, 30));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 950, 410));
+        getContentPane().add(txtBuscarEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 300, 30));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Buscar:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 70, 30));
 
-        cmbFiltroEstudiantes.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmbFiltroEstudiantes.addActionListener(new java.awt.event.ActionListener() {
+        cmbTurno.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbTurno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbFiltroEstudiantesActionPerformed(evt);
+                cmbTurnoActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbFiltroEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 130, 30));
+        getContentPane().add(cmbTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 200, 130, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Filtro:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 130, -1, -1));
+        jLabel3.setText("Turno:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, -1, -1));
 
         btnMarcarAsistencia.setBackground(new java.awt.Color(51, 204, 0));
         btnMarcarAsistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -113,7 +120,38 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
                 btnMarcarAsistenciaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMarcarAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 140, 160, 50));
+        getContentPane().add(btnMarcarAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 150, 160, 50));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setText("Fecha:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 70, 30));
+
+        jSpinnerFecha.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.DAY_OF_WEEK));
+        getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, -1, 30));
+
+        cmbCarrera.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbCarrera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCarreraActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbCarrera, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 130, 30));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setText("Carrera:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Ciclo:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 160, -1, -1));
+
+        cmbCiclo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbCiclo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCicloActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 130, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -126,13 +164,21 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnMenuAsistenciaActionPerformed
 
-    private void cmbFiltroEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFiltroEstudiantesActionPerformed
+    private void cmbTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTurnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbFiltroEstudiantesActionPerformed
+    }//GEN-LAST:event_cmbTurnoActionPerformed
 
     private void btnMarcarAsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarAsistenciaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMarcarAsistenciaActionPerformed
+
+    private void cmbCarreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCarreraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCarreraActionPerformed
+
+    private void cmbCicloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCicloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCicloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,13 +221,19 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnMarcarAsistencia;
     private javax.swing.JButton btnMenuAsistencia;
-    private javax.swing.JComboBox<String> cmbFiltroEstudiantes;
+    private javax.swing.JComboBox<String> cmbCarrera;
+    private javax.swing.JComboBox<String> cmbCiclo;
+    private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinnerFecha;
     private javax.swing.JTable table_estudiantes;
     private javax.swing.JTextField txtBuscarEstudiantes;
     // End of variables declaration//GEN-END:variables

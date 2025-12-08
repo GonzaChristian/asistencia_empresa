@@ -28,12 +28,14 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtCargo = new javax.swing.JTextField();
         txtIDPersonal = new javax.swing.JTextField();
-        txtCodigo = new javax.swing.JTextField();
-        txtNombres = new javax.swing.JTextField();
         txtDNI = new javax.swing.JTextField();
+        txtNombres = new javax.swing.JTextField();
+        txtApellidos = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
+        txtCargo = new javax.swing.JTextField();
+        txtHorario = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPersonal = new javax.swing.JTable();
         btnNuevoPersonal = new javax.swing.JButton();
@@ -42,9 +44,7 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         btnEliminarPersonal = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtApellidos = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txtHorario = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -96,9 +96,6 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         jLabel7.setText("Cargo:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, -1));
 
-        txtCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 180, -1));
-
         txtIDPersonal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtIDPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,17 +104,26 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         });
         getContentPane().add(txtIDPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, 180, -1));
 
-        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 180, -1));
+        txtDNI.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 180, -1));
 
         txtNombres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         getContentPane().add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 180, -1));
 
-        txtDNI.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 180, -1));
+        txtApellidos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 180, -1));
+
+        txtCorreo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 180, -1));
 
         txtTelefono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         getContentPane().add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 200, 180, -1));
+
+        txtCargo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 260, 180, -1));
+
+        txtHorario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(txtHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 320, 180, -1));
 
         tablaPersonal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -183,15 +189,9 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         jLabel10.setText("Apellidos:");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, -1, -1));
 
-        txtApellidos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 180, -1));
-
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setText("Horario:");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, -1, -1));
-
-        txtHorario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 320, 180, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -273,7 +273,7 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
     private javax.swing.JTable tablaPersonal;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtCargo;
-    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDNI;
     private javax.swing.JTextField txtHorario;
     private javax.swing.JTextField txtIDPersonal;
