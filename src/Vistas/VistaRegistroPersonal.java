@@ -165,7 +165,7 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         });
         jPanel1.add(btnMenuPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 10, 80, 80));
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_iestpvillamaria_80.png"))); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_limpieza80.png"))); // NOI18N
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 80, 80));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 100));
@@ -295,7 +295,7 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         });
         getContentPane().add(btnEliminarPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 247, 120, 40));
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/personal.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/personal_registro240.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 117, 200, 250));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

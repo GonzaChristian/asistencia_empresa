@@ -31,10 +31,8 @@ public class VistaMenuPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCerrarSesion = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        btnRegistroEstudiantes = new javax.swing.JButton();
         btnRegistroPersonal = new javax.swing.JButton();
         btnAsistenciaPersonal1 = new javax.swing.JButton();
-        btnAsistenciaEstudiantes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -59,66 +57,38 @@ public class VistaMenuPrincipal extends javax.swing.JFrame {
         });
         jPanel2.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, 80, 80));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_iestpvillamaria_80.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_limpieza80.png"))); // NOI18N
         jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 80, 80));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 100));
 
-        btnRegistroEstudiantes.setBackground(new java.awt.Color(153, 153, 255));
-        btnRegistroEstudiantes.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        btnRegistroEstudiantes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/estudiante_boton_100.png"))); // NOI18N
-        btnRegistroEstudiantes.setText("<html>REGISTRO DE <br>ESTUDIANTES");
-        btnRegistroEstudiantes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistroEstudiantesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnRegistroEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 350, 350, 180));
-
         btnRegistroPersonal.setBackground(new java.awt.Color(255, 255, 153));
         btnRegistroPersonal.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        btnRegistroPersonal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/profesor_boton_100.png"))); // NOI18N
+        btnRegistroPersonal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/personal_boton_120.png"))); // NOI18N
         btnRegistroPersonal.setText("<html> REGISTRO DE <br> PERSONAL");
         btnRegistroPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistroPersonalActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistroPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 350, 180));
+        jPanel1.add(btnRegistroPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 350, 220));
 
-        btnAsistenciaPersonal1.setBackground(new java.awt.Color(255, 153, 153));
+        btnAsistenciaPersonal1.setBackground(new java.awt.Color(102, 255, 102));
         btnAsistenciaPersonal1.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        btnAsistenciaPersonal1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportes_boton_100.png"))); // NOI18N
-        btnAsistenciaPersonal1.setText("<html>ASISTENCIA <br>PERSONAL");
+        btnAsistenciaPersonal1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/asistencia_boton_90.png"))); // NOI18N
+        btnAsistenciaPersonal1.setText("<html>ASISTENCIA<br>DEL <br>PERSONAL");
+        btnAsistenciaPersonal1.setActionCommand("<html>ASISTENCIA<br>DEL <br>PERSONAL");
         btnAsistenciaPersonal1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAsistenciaPersonal1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAsistenciaPersonal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 350, 180));
+        jPanel1.add(btnAsistenciaPersonal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, 350, 220));
 
-        btnAsistenciaEstudiantes.setBackground(new java.awt.Color(153, 255, 153));
-        btnAsistenciaEstudiantes.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
-        btnAsistenciaEstudiantes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/asistencia_boton_90.png"))); // NOI18N
-        btnAsistenciaEstudiantes.setText("<html>ASISTENCIA<br>  ESTUDIANTES");
-        btnAsistenciaEstudiantes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAsistenciaEstudiantesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnAsistenciaEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 130, 350, 180));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 570));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 420));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnRegistroEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroEstudiantesActionPerformed
-        VistaRegistroEstudiantes vistaEstudiantes = new VistaRegistroEstudiantes();
-        vistaEstudiantes.setVisible(true);
-        vistaEstudiantes.setLocationRelativeTo(null); // Centrar ventana
-        this.dispose();  
-    }//GEN-LAST:event_btnRegistroEstudiantesActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this,
@@ -147,13 +117,6 @@ public class VistaMenuPrincipal extends javax.swing.JFrame {
         asistenciaPersonal.setLocationRelativeTo(null); // Centrar ventana
         this.dispose();
     }//GEN-LAST:event_btnAsistenciaPersonal1ActionPerformed
-
-    private void btnAsistenciaEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsistenciaEstudiantesActionPerformed
-        AsistenciaEstudiantes asistenciaEstudiante = new AsistenciaEstudiantes();
-        asistenciaEstudiante.setVisible(true);
-        asistenciaEstudiante.setLocationRelativeTo(null); // Centrar ventana
-        this.dispose();
-    }//GEN-LAST:event_btnAsistenciaEstudiantesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,10 +154,8 @@ public class VistaMenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAsistenciaEstudiantes;
     private javax.swing.JButton btnAsistenciaPersonal1;
     private javax.swing.JButton btnCerrarSesion;
-    private javax.swing.JButton btnRegistroEstudiantes;
     private javax.swing.JButton btnRegistroPersonal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

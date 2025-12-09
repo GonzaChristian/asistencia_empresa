@@ -145,6 +145,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnMenuAsistencia = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_personal = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
@@ -152,6 +153,8 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         btnMarcarTardanza = new javax.swing.JButton();
         btnMarcarAsistencia = new javax.swing.JButton();
         btnMarcarFalta = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -161,7 +164,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel1.setText("ASISTENCIA DE PERSONAL");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 640, 80));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 640, 80));
 
         btnMenuAsistencia.setBackground(new java.awt.Color(181, 181, 181));
         btnMenuAsistencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/boton_menu_80.png"))); // NOI18N
@@ -174,8 +177,11 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         });
         jPanel1.add(btnMenuAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 10, 80, 80));
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_iestpvillamaria_80.png"))); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_limpieza80.png"))); // NOI18N
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 80, 80));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_limpieza80.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 80, 80));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 100));
 
@@ -203,8 +209,8 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 950, 430));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Fecha:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 70, 40));
+        jLabel3.setText("Buscar:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 70, 40));
 
         jSpinnerFecha.setModel(new javax.swing.SpinnerDateModel());
         jSpinnerFecha.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -212,7 +218,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
                 jSpinnerFechaStateChanged(evt);
             }
         });
-        getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, -1, 30));
+        getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, -1, 30));
 
         btnMarcarTardanza.setBackground(new java.awt.Color(255, 204, 51));
         btnMarcarTardanza.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -246,6 +252,11 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnMarcarFalta, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 140, 160, 50));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setText("Fecha:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 70, 40));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 270, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -322,11 +333,14 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
     private javax.swing.JButton btnMarcarTardanza;
     private javax.swing.JButton btnMenuAsistencia;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerFecha;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable table_personal;
     // End of variables declaration//GEN-END:variables
 }

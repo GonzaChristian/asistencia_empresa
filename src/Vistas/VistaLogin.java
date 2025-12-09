@@ -1,16 +1,14 @@
 
 package Vistas;
-import DAO.UsuarioDAO;
-import Modelo.Usuario;
+
 import javax.swing.JOptionPane;
 
 public class VistaLogin extends javax.swing.JFrame {
-    private UsuarioDAO usuarioDAO;
+    
 
     public VistaLogin() {
         initComponents();
         this.setLocationRelativeTo(null);
-        usuarioDAO = new UsuarioDAO();
         
     }
 
@@ -77,22 +75,22 @@ public class VistaLogin extends javax.swing.JFrame {
         });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 130, 40));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_iestpvillamaria_300.png"))); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 310, 320));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo_limpieza300.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 310, 320));
 
         jPanel2.setBackground(new java.awt.Color(181, 181, 181));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 38)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(68, 37, 117));
-        jLabel2.setText("IESTP \"VILLA MARÍA\"");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, 390, 60));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("LIMPIEZA INTEGRAL S.A.C");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 500, 60));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 42)); // NOI18N
         jLabel1.setText("REGISTRO DE ASISTENCIAS");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, 50));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 120));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 130));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 470));
 
@@ -100,43 +98,23 @@ public class VistaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        String usuario = UsuarioLogin.getText().trim();
-        String contrasena = ContraseñaLogin.getText().trim();
-
-        // Validar campos vacíos
-        if (usuario.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Por favor ingrese usuario y contraseña", 
-                "Campos Vacíos", 
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Validar credenciales con la base de datos
-        Usuario usuarioValidado = usuarioDAO.validarLogin(usuario, contrasena);
-
-        if (usuarioValidado != null) {
-            // Login exitoso
-            JOptionPane.showMessageDialog(this, 
-                "¡Bienvenido " + usuarioValidado.getUsuario() + "!", 
-                "Login Exitoso", 
-                JOptionPane.INFORMATION_MESSAGE);
-            
-            // Abrir menú principal
-            VistaMenuPrincipal menu = new VistaMenuPrincipal();
-            menu.setVisible(true);
-            menu.setLocationRelativeTo(null);
-            this.dispose();
-        } else {
-            // Login fallido
-            JOptionPane.showMessageDialog(this, 
-                "Usuario o contraseña incorrectos", 
-                "Error de Autenticación", 
-                JOptionPane.ERROR_MESSAGE);
-            ContraseñaLogin.setText("");
-            UsuarioLogin.requestFocus();
-        }
         
+         // Obtener datos de los campos
+        String usuario = UsuarioLogin.getText();
+        String contraseña = ContraseñaLogin.getText();
+
+        // Validación básica (usuario y contraseña fijos)
+        if(usuario.equals("admin") && contraseña.equals("1234")){
+            // Si coincide, abrir la pantalla principal
+            VistaMenuPrincipal p = new VistaMenuPrincipal();
+            p.setVisible(true);
+            this.dispose(); 
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Usuario o contraseña incorrectos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
         
         
     }//GEN-LAST:event_btnIngresarActionPerformed

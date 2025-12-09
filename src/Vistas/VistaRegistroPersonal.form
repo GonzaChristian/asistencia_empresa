@@ -79,7 +79,7 @@
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/logo_iestpvillamaria_80.png"/>
+              <Image iconType="3" name="/imagenes/logo_limpieza80.png"/>
             </Property>
           </Properties>
           <Constraints>
@@ -438,7 +438,7 @@
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/imagenes/personal.png"/>
+          <Image iconType="3" name="/imagenes/personal_registro240.png"/>
         </Property>
       </Properties>
       <Constraints>
