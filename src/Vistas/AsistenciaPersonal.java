@@ -1,20 +1,135 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vistas;
 
-/**
- *
- * @author chris
- */
+import DAO.AsistenciaDAO;
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class AsistenciaPersonal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistroAsistencia
-     */
+    private AsistenciaDAO asistenciaDAO;
+    private DefaultTableModel modeloTabla;
+    
     public AsistenciaPersonal() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        asistenciaDAO = new AsistenciaDAO();
+        inicializarTabla();
+        inicializarComponentes();
+        cargarDatos();
+    }
+    
+    private void inicializarComponentes() {
+        // Configurar fecha actual en el spinner
+        jSpinnerFecha.setValue(new java.util.Date());
+    }
+    
+    private void inicializarTabla() {
+        modeloTabla = new DefaultTableModel(
+            new Object[]{"DNI", "Nombres", "Apellidos", "Cargo", "Estado"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table_personal.setModel(modeloTabla);
+    }
+    
+    private void cargarDatos() {
+        limpiarTabla();
+        
+        // Obtener fecha seleccionada
+        java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
+        Date fechaSQL = new Date(fechaUtil.getTime());
+        
+        // Obtener personal con asistencia
+        List<Map<String, Object>> lista = asistenciaDAO.obtenerPersonalConAsistencia(fechaSQL);
+        
+        for (Map<String, Object> fila : lista) {
+            Object[] datos = {
+                fila.get("dni"),
+                fila.get("nombres"),
+                fila.get("apellidos"),
+                fila.get("cargo"),
+                fila.get("estado")
+            };
+            modeloTabla.addRow(datos);
+        }
+    }
+    
+    private void limpiarTabla() {
+        while (modeloTabla.getRowCount() > 0) {
+            modeloTabla.removeRow(0);
+        }
+    }
+    
+    private void marcarAsistencia(String estadoAsistencia) {
+        int filaSeleccionada = table_personal.getSelectedRow();
+        
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione un personal de la tabla", 
+                "Advertencia", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            // Obtener DNI del personal seleccionado
+            String dni = modeloTabla.getValueAt(filaSeleccionada, 0).toString();
+            
+            // Obtener ID del personal desde la base de datos
+            int idPersonal = obtenerIdPersonalPorDNI(dni);
+            
+            if (idPersonal == -1) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se pudo obtener el ID del personal", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Obtener fecha seleccionada
+            java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
+            Date fechaSQL = new Date(fechaUtil.getTime());
+            
+            // Registrar asistencia
+            if (asistenciaDAO.registrarAsistenciaPersonal(idPersonal, fechaSQL, estadoAsistencia)) {
+                JOptionPane.showMessageDialog(this, 
+                    "Asistencia marcada como: " + estadoAsistencia, 
+                    "Éxito", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                cargarDatos(); // Recargar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al registrar asistencia", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private int obtenerIdPersonalPorDNI(String dni) {
+        // Buscar el ID en la lista actual
+        List<Map<String, Object>> lista = asistenciaDAO.obtenerPersonalConAsistencia(
+            new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime())
+        );
+        
+        for (Map<String, Object> fila : lista) {
+            if (fila.get("dni").toString().equals(dni)) {
+                return (int) fila.get("id_personal");
+            }
+        }
+        return -1;
     }
 
     /**
@@ -32,10 +147,8 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_personal = new javax.swing.JTable();
-        txtBuscarPersonal = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jSpinnerFecha = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
         btnMarcarTardanza = new javax.swing.JButton();
         btnMarcarAsistencia = new javax.swing.JButton();
         btnMarcarFalta = new javax.swing.JButton();
@@ -87,19 +200,19 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
             table_personal.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 950, 390));
-        getContentPane().add(txtBuscarPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 390, 30));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 950, 430));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Fecha:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 150, 70, 40));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 70, 40));
 
         jSpinnerFecha.setModel(new javax.swing.SpinnerDateModel());
-        getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, -1, 30));
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setText("Buscar:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 70, 30));
+        jSpinnerFecha.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerFechaStateChanged(evt);
+            }
+        });
+        getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, -1, 30));
 
         btnMarcarTardanza.setBackground(new java.awt.Color(255, 204, 51));
         btnMarcarTardanza.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -110,7 +223,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
                 btnMarcarTardanzaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMarcarTardanza, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 160, 160, 40));
+        getContentPane().add(btnMarcarTardanza, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 160, 50));
 
         btnMarcarAsistencia.setBackground(new java.awt.Color(51, 204, 0));
         btnMarcarAsistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -121,7 +234,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
                 btnMarcarAsistenciaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMarcarAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 110, 160, 40));
+        getContentPane().add(btnMarcarAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, 160, 50));
 
         btnMarcarFalta.setBackground(new java.awt.Color(255, 51, 51));
         btnMarcarFalta.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -132,7 +245,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
                 btnMarcarFaltaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMarcarFalta, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 210, 160, 40));
+        getContentPane().add(btnMarcarFalta, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 140, 160, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -146,16 +259,20 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuAsistenciaActionPerformed
 
     private void btnMarcarTardanzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarTardanzaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Tardanza");
     }//GEN-LAST:event_btnMarcarTardanzaActionPerformed
 
     private void btnMarcarAsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarAsistenciaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Presente");
     }//GEN-LAST:event_btnMarcarAsistenciaActionPerformed
 
     private void btnMarcarFaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarFaltaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Ausente");
     }//GEN-LAST:event_btnMarcarFaltaActionPerformed
+
+    private void jSpinnerFechaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerFechaStateChanged
+        cargarDatos();
+    }//GEN-LAST:event_jSpinnerFechaStateChanged
 
     /**
      * @param args the command line arguments
@@ -206,12 +323,10 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
     private javax.swing.JButton btnMenuAsistencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerFecha;
     private javax.swing.JTable table_personal;
-    private javax.swing.JTextField txtBuscarPersonal;
     // End of variables declaration//GEN-END:variables
 }

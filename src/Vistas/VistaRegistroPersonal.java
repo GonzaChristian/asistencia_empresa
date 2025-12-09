@@ -1,12 +1,110 @@
 
 package Vistas;
 
+import DAO.PersonalDAO;
+import Modelo.Personal;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class VistaRegistroPersonal extends javax.swing.JFrame {
 
-
+    private PersonalDAO personalDAO;
+    private DefaultTableModel modeloTabla;
+    
     public VistaRegistroPersonal() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        personalDAO = new PersonalDAO();
+        inicializarTabla();
+        cargarDatos();
+        txtIDPersonal.setEnabled(false); // El ID es autoincremental
+    }
+    
+    private void inicializarTabla() {
+        modeloTabla = new DefaultTableModel(
+            new Object[]{"ID", "DNI", "Nombres", "Apellidos", "Correo", "Teléfono", "Cargo", "Horario"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tablaPersonal.setModel(modeloTabla);
+    }
+    
+    private void cargarDatos() {
+        limpiarTabla();
+        List<Personal> lista = personalDAO.listarTodos();
+        for (Personal per : lista) {
+            Object[] fila = {
+                per.getIdPersonal(),
+                per.getDni(),
+                per.getNombres(),
+                per.getApellidos(),
+                per.getCorreo(),
+                per.getTelefono(),
+                per.getCargo(),
+                per.getHorario()
+            };
+            modeloTabla.addRow(fila);
+        }
+    }
+    
+    private void limpiarTabla() {
+        while (modeloTabla.getRowCount() > 0) {
+            modeloTabla.removeRow(0);
+        }
+    }
+    
+    private void limpiarCampos() {
+        txtIDPersonal.setText("");
+        txtDNI.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+        txtCargo.setText("");
+        txtHorario.setText("");
+        txtDNI.requestFocus();
+    }
+    
+    private boolean validarCampos() {
+        if (txtDNI.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el DNI", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtDNI.requestFocus();
+            return false;
+        }
+        if (txtDNI.getText().trim().length() != 8) {
+            JOptionPane.showMessageDialog(this, "El DNI debe tener 8 dígitos", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtDNI.requestFocus();
+            return false;
+        }
+        if (txtNombres.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese los nombres", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtNombres.requestFocus();
+            return false;
+        }
+        if (txtApellidos.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese los apellidos", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtApellidos.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
+    private void cargarDatosEnCampos() {
+        int filaSeleccionada = tablaPersonal.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            txtIDPersonal.setText(modeloTabla.getValueAt(filaSeleccionada, 0).toString());
+            txtDNI.setText(modeloTabla.getValueAt(filaSeleccionada, 1).toString());
+            txtNombres.setText(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
+            txtApellidos.setText(modeloTabla.getValueAt(filaSeleccionada, 3).toString());
+            txtCorreo.setText(modeloTabla.getValueAt(filaSeleccionada, 4).toString());
+            txtTelefono.setText(modeloTabla.getValueAt(filaSeleccionada, 5).toString());
+            txtCargo.setText(modeloTabla.getValueAt(filaSeleccionada, 6).toString());
+            txtHorario.setText(modeloTabla.getValueAt(filaSeleccionada, 7).toString());
+        }
     }
 
     /**
@@ -136,6 +234,11 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
                 "ID", "DNI", "Nombres", "Apellidos", "Correo", "Telefono", "Cargo", "Horario"
             }
         ));
+        tablaPersonal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPersonalMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaPersonal);
         if (tablaPersonal.getColumnModel().getColumnCount() > 0) {
             tablaPersonal.getColumnModel().getColumn(0).setResizable(false);
@@ -174,12 +277,22 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
         btnLimpiarPersonal.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLimpiarPersonal.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpiarPersonal.setText("Limpiar");
+        btnLimpiarPersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarPersonalActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnLimpiarPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 307, 120, 40));
 
         btnEliminarPersonal.setBackground(new java.awt.Color(255, 51, 51));
         btnEliminarPersonal.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEliminarPersonal.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarPersonal.setText("Eliminar");
+        btnEliminarPersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarPersonalActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEliminarPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 247, 120, 40));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/personal.png"))); // NOI18N
@@ -209,41 +322,91 @@ public class VistaRegistroPersonal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDPersonalActionPerformed
 
     private void btnNuevoPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoPersonalActionPerformed
-        // TODO add your handling code here:
+        if (!validarCampos()) return;
+        
+        Personal per = new Personal(
+            txtDNI.getText().trim(),
+            txtNombres.getText().trim(),
+            txtApellidos.getText().trim(),
+            txtCorreo.getText().trim(),
+            txtTelefono.getText().trim(),
+            txtCargo.getText().trim(),
+            txtHorario.getText().trim()
+        );
+        
+        if (personalDAO.insertar(per)) {
+            JOptionPane.showMessageDialog(this, "Personal registrado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatos();
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar personal", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnNuevoPersonalActionPerformed
 
     private void btnModificarPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarPersonalActionPerformed
-        // TODO add your handling code here:
+        if (txtIDPersonal.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un personal de la tabla", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!validarCampos()) return;
+        
+        Personal per = new Personal(
+            Integer.parseInt(txtIDPersonal.getText()),
+            txtDNI.getText().trim(),
+            txtNombres.getText().trim(),
+            txtApellidos.getText().trim(),
+            txtCorreo.getText().trim(),
+            txtTelefono.getText().trim(),
+            txtCargo.getText().trim(),
+            txtHorario.getText().trim(),
+            "Activo"
+        );
+        
+        if (personalDAO.actualizar(per)) {
+            JOptionPane.showMessageDialog(this, "Personal actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatos();
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al actualizar personal", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnModificarPersonalActionPerformed
+
+    private void btnEliminarPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPersonalActionPerformed
+        if (txtIDPersonal.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un personal de la tabla", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int respuesta = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro de eliminar este personal?",
+            "Confirmar Eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (respuesta == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(txtIDPersonal.getText());
+            if (personalDAO.eliminar(id)) {
+                JOptionPane.showMessageDialog(this, "Personal eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarDatos();
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar personal", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarPersonalActionPerformed
+
+    private void btnLimpiarPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarPersonalActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnLimpiarPersonalActionPerformed
+
+    private void tablaPersonalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPersonalMouseClicked
+        cargarDatosEnCampos();
+    }//GEN-LAST:event_tablaPersonalMouseClicked
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VistaRegistroPersonal().setVisible(true);

@@ -1,20 +1,153 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vistas;
 
-/**
- *
- * @author chris
- */
+import DAO.AsistenciaDAO;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class AsistenciaEstudiantes extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistroAsistencia
-     */
+    private AsistenciaDAO asistenciaDAO;
+    private DefaultTableModel modeloTabla;
+    
     public AsistenciaEstudiantes() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        asistenciaDAO = new AsistenciaDAO();
+        inicializarTabla();
+        inicializarComponentes();
+        cargarDatos();
+    }
+    
+    private void inicializarComponentes() {
+
+        cmbCarrera.setSelectedIndex(0);
+        cmbCiclo.setSelectedIndex(0);
+        cmbTurno.setSelectedIndex(0);
+        
+        // Configurar fecha actual en el spinner
+        jSpinnerFecha.setValue(new java.util.Date());
+    }
+    
+    private void inicializarTabla() {
+        modeloTabla = new DefaultTableModel(
+            new Object[]{"DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Turno", "Estado"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table_estudiantes.setModel(modeloTabla);
+    }
+    
+    private void cargarDatos() {
+        limpiarTabla();
+        
+        // Obtener fecha seleccionada
+        java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
+        Date fechaSQL = new Date(fechaUtil.getTime());
+        
+        // Obtener filtros seleccionados
+        String carrera = cmbCarrera.getSelectedItem().toString();
+        String ciclo = cmbCiclo.getSelectedItem().toString();
+        String turno = cmbTurno.getSelectedItem().toString();
+        
+        // Obtener estudiantes con asistencia
+        List<Map<String, Object>> lista = asistenciaDAO.obtenerEstudiantesConAsistencia(
+            fechaSQL, carrera, ciclo, turno
+        );
+        
+        for (Map<String, Object> fila : lista) {
+            Object[] datos = {
+                fila.get("dni"),
+                fila.get("nombres"),
+                fila.get("apellidos"),
+                fila.get("carrera"),
+                fila.get("ciclo"),
+                fila.get("turno"),
+                fila.get("estado")
+            };
+            modeloTabla.addRow(datos);
+        }
+    }
+    
+    private void limpiarTabla() {
+        while (modeloTabla.getRowCount() > 0) {
+            modeloTabla.removeRow(0);
+        }
+    }
+    
+    private void marcarAsistencia(String estadoAsistencia) {
+        int filaSeleccionada = table_estudiantes.getSelectedRow();
+        
+        if (filaSeleccionada < 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione un estudiante de la tabla", 
+                "Advertencia", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            // Obtener DNI del estudiante seleccionado
+            String dni = modeloTabla.getValueAt(filaSeleccionada, 0).toString();
+            
+            // Obtener ID del estudiante desde la base de datos
+            int idEstudiante = obtenerIdEstudiantePorDNI(dni);
+            
+            if (idEstudiante == -1) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se pudo obtener el ID del estudiante", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Obtener fecha seleccionada
+            java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
+            Date fechaSQL = new Date(fechaUtil.getTime());
+            
+            // Registrar asistencia
+            if (asistenciaDAO.registrarAsistenciaEstudiante(idEstudiante, fechaSQL, estadoAsistencia)) {
+                JOptionPane.showMessageDialog(this, 
+                    "Asistencia marcada como: " + estadoAsistencia, 
+                    "Éxito", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                cargarDatos(); // Recargar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al registrar asistencia", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private int obtenerIdEstudiantePorDNI(String dni) {
+        // Buscar el ID en la lista actual
+        List<Map<String, Object>> lista = asistenciaDAO.obtenerEstudiantesConAsistencia(
+            new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime()),
+            cmbCarrera.getSelectedItem().toString(),
+            cmbCiclo.getSelectedItem().toString(),
+            cmbTurno.getSelectedItem().toString()
+        );
+        
+        for (Map<String, Object> fila : lista) {
+            if (fila.get("dni").toString().equals(dni)) {
+                return (int) fila.get("id_estudiante");
+            }
+        }
+        return -1;
     }
 
     /**
@@ -32,8 +165,6 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_estudiantes = new javax.swing.JTable();
-        txtBuscarEstudiantes = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         cmbTurno = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         btnMarcarTardanza = new javax.swing.JButton();
@@ -95,23 +226,19 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 950, 400));
-        getContentPane().add(txtBuscarEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 300, 30));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setText("Buscar:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 70, 30));
 
         cmbTurno.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbTurno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mañana", "Noche" }));
         cmbTurno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTurnoActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 220, 130, 30));
+        getContentPane().add(cmbTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 130, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Turno:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, -1, -1));
 
         btnMarcarTardanza.setBackground(new java.awt.Color(255, 204, 51));
         btnMarcarTardanza.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -129,31 +256,38 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 70, 30));
 
         jSpinnerFecha.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.DAY_OF_WEEK));
+        jSpinnerFecha.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerFechaStateChanged(evt);
+            }
+        });
         getContentPane().add(jSpinnerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, -1, 30));
 
         cmbCarrera.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computación e Informática", "Enfermería Técnica", "Cosmética Dermatológica", "Industrias Alimentarias" }));
         cmbCarrera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCarreraActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbCarrera, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 130, 30));
+        getContentPane().add(cmbCarrera, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 130, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Carrera:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Ciclo:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 140, -1, -1));
 
         cmbCiclo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cmbCiclo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I", "II", "III", "IV", "V", "VI" }));
         cmbCiclo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCicloActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, 130, 30));
+        getContentPane().add(cmbCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, 130, 30));
 
         btnMarcarAsistencia.setBackground(new java.awt.Color(51, 204, 0));
         btnMarcarAsistencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -189,45 +323,37 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuAsistenciaActionPerformed
 
     private void cmbTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTurnoActionPerformed
-        // TODO add your handling code here:
+       cargarDatos();
     }//GEN-LAST:event_cmbTurnoActionPerformed
 
     private void btnMarcarTardanzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarTardanzaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Tardanza");
     }//GEN-LAST:event_btnMarcarTardanzaActionPerformed
 
     private void cmbCarreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCarreraActionPerformed
-        // TODO add your handling code here:
+        cargarDatos();
     }//GEN-LAST:event_cmbCarreraActionPerformed
 
     private void cmbCicloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCicloActionPerformed
-        // TODO add your handling code here:
+        cargarDatos();
     }//GEN-LAST:event_cmbCicloActionPerformed
 
     private void btnMarcarAsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarAsistenciaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Presente");
     }//GEN-LAST:event_btnMarcarAsistenciaActionPerformed
 
     private void btnMarcarFaltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarFaltaActionPerformed
-        // TODO add your handling code here:
+        marcarAsistencia("Ausente");
     }//GEN-LAST:event_btnMarcarFaltaActionPerformed
+
+    private void jSpinnerFechaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerFechaStateChanged
+        cargarDatos();
+    }//GEN-LAST:event_jSpinnerFechaStateChanged
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new AsistenciaEstudiantes().setVisible(true);
@@ -244,7 +370,6 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbCiclo;
     private javax.swing.JComboBox<String> cmbTurno;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -254,6 +379,5 @@ public class AsistenciaEstudiantes extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerFecha;
     private javax.swing.JTable table_estudiantes;
-    private javax.swing.JTextField txtBuscarEstudiantes;
     // End of variables declaration//GEN-END:variables
 }

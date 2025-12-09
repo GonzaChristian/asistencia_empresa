@@ -1,14 +1,16 @@
 
 package Vistas;
-
+import DAO.UsuarioDAO;
+import Modelo.Usuario;
+import javax.swing.JOptionPane;
 
 public class VistaLogin extends javax.swing.JFrame {
+    private UsuarioDAO usuarioDAO;
 
-    /**
-     * Creates new form VistaLogin
-     */
     public VistaLogin() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        usuarioDAO = new UsuarioDAO();
         
     }
 
@@ -98,64 +100,64 @@ public class VistaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        String usuario = UsuarioLogin.getText();
-        String contraseña = ContraseñaLogin.getText();
+        String usuario = UsuarioLogin.getText().trim();
+        String contrasena = ContraseñaLogin.getText().trim();
 
-        if (usuario.isEmpty() || contraseña.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
+        // Validar campos vacíos
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
                 "Por favor ingrese usuario y contraseña", 
-                "Error", 
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-        } else if ((usuario.equals("jessica") && contraseña.equals("jessica123")) || (usuario.equals("antonio") && contraseña.equals("antonio123"))){
+                "Campos Vacíos", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validar credenciales con la base de datos
+        Usuario usuarioValidado = usuarioDAO.validarLogin(usuario, contrasena);
+
+        if (usuarioValidado != null) {
             // Login exitoso
+            JOptionPane.showMessageDialog(this, 
+                "¡Bienvenido " + usuarioValidado.getUsuario() + "!", 
+                "Login Exitoso", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            // Abrir menú principal
             VistaMenuPrincipal menu = new VistaMenuPrincipal();
             menu.setVisible(true);
-            menu.setLocationRelativeTo(null); 
+            menu.setLocationRelativeTo(null);
             this.dispose();
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, 
+            // Login fallido
+            JOptionPane.showMessageDialog(this, 
                 "Usuario o contraseña incorrectos", 
-                "Error de autenticación", 
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+                "Error de Autenticación", 
+                JOptionPane.ERROR_MESSAGE);
+            ContraseñaLogin.setText("");
+            UsuarioLogin.requestFocus();
+        }
         
         
         
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        System.exit(0);
+        int respuesta = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro que desea salir del sistema?",
+            "Confirmar Salida",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+      java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VistaLogin().setVisible(true);
             }

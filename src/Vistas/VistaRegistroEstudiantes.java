@@ -1,13 +1,111 @@
 
 package Vistas;
-
+import DAO.EstudianteDAO;
+import Modelo.Estudiante;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class VistaRegistroEstudiantes extends javax.swing.JFrame {
-
-
+    private EstudianteDAO estudianteDAO;
+    private DefaultTableModel modeloTabla;
+    
     public VistaRegistroEstudiantes() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        estudianteDAO = new EstudianteDAO();
+        inicializarTabla();
+        cargarDatos();
+        txtID.setEnabled(false); // El ID es autoincremental
     }
+    
+    private void inicializarTabla() {
+        modeloTabla = new DefaultTableModel(
+            new Object[]{"ID", "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Turno"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer tabla no editable
+            }
+        };
+        tablaEstudiantes.setModel(modeloTabla);
+    }
+    
+    
+    private void cargarDatos() {
+        limpiarTabla();
+        List<Estudiante> lista = estudianteDAO.listarTodos();
+        for (Estudiante est : lista) {
+            Object[] fila = {
+                est.getIdEstudiante(),
+                est.getDni(),
+                est.getNombres(),
+                est.getApellidos(),
+                est.getCarrera(),
+                est.getCiclo(),
+                est.getTurno()
+            };
+            modeloTabla.addRow(fila);
+        }
+    }
+    
+    private void limpiarTabla() {
+        while (modeloTabla.getRowCount() > 0) {
+            modeloTabla.removeRow(0);
+        }
+    }
+    
+    private void limpiarCampos() {
+        txtID.setText("");
+        txtDNI.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        cmbCarrera.setSelectedIndex(0);
+        cmbCiclo.setSelectedIndex(0);
+        cmbTurno.setSelectedIndex(0);
+        txtDNI.requestFocus();
+    }
+    
+    private boolean validarCampos() {
+        if (txtDNI.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el DNI", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtDNI.requestFocus();
+            return false;
+        }
+        if (txtDNI.getText().trim().length() != 8) {
+            JOptionPane.showMessageDialog(this, "El DNI debe tener 8 dígitos", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtDNI.requestFocus();
+            return false;
+        }
+        if (txtNombres.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese los nombres", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtNombres.requestFocus();
+            return false;
+        }
+        if (txtApellidos.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese los apellidos", "Validación", JOptionPane.WARNING_MESSAGE);
+            txtApellidos.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
+    private void cargarDatosEnCampos() {
+        int filaSeleccionada = tablaEstudiantes.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            txtID.setText(modeloTabla.getValueAt(filaSeleccionada, 0).toString());
+            txtDNI.setText(modeloTabla.getValueAt(filaSeleccionada, 1).toString());
+            txtNombres.setText(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
+            txtApellidos.setText(modeloTabla.getValueAt(filaSeleccionada, 3).toString());
+            cmbCarrera.setSelectedItem(modeloTabla.getValueAt(filaSeleccionada, 4).toString());
+            cmbCiclo.setSelectedItem(modeloTabla.getValueAt(filaSeleccionada, 5).toString());
+            cmbTurno.setSelectedItem(modeloTabla.getValueAt(filaSeleccionada, 6).toString());
+        }
+    }
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,6 +220,11 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
                 "ID", "DNI", "Nombres", "Apellidos", "Carrera", "Ciclo", "Turno"
             }
         ));
+        tablaEstudiantes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaEstudiantesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaEstudiantes);
         if (tablaEstudiantes.getColumnModel().getColumnCount() > 0) {
             tablaEstudiantes.getColumnModel().getColumn(0).setResizable(false);
@@ -161,12 +264,22 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
         btnLimpiarEstudiante.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLimpiarEstudiante.setForeground(new java.awt.Color(255, 255, 255));
         btnLimpiarEstudiante.setText("Limpiar");
+        btnLimpiarEstudiante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarEstudianteActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnLimpiarEstudiante, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 300, 120, 40));
 
         btnEliminarEstudiante.setBackground(new java.awt.Color(255, 51, 51));
         btnEliminarEstudiante.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEliminarEstudiante.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarEstudiante.setText("Eliminar");
+        btnEliminarEstudiante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarEstudianteActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEliminarEstudiante, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 240, 120, 40));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/estudiantesregistro_210.png"))); // NOI18N
@@ -189,11 +302,51 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEstudianteActionPerformed
-        // TODO add your handling code here:
+        if (!validarCampos()) return;
+        
+        Estudiante est = new Estudiante(
+            txtDNI.getText().trim(),
+            txtNombres.getText().trim(),
+            txtApellidos.getText().trim(),
+            cmbCarrera.getSelectedItem().toString(),
+            cmbCiclo.getSelectedItem().toString(),
+            cmbTurno.getSelectedItem().toString()
+        );
+        
+        if (estudianteDAO.insertar(est)) {
+            JOptionPane.showMessageDialog(this, "Estudiante registrado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatos();
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar estudiante", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnNuevoEstudianteActionPerformed
 
     private void btnModificarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEstudianteActionPerformed
-        // TODO add your handling code here:
+        if (txtID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un estudiante de la tabla", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!validarCampos()) return;
+        
+        Estudiante est = new Estudiante(
+            Integer.parseInt(txtID.getText()),
+            txtDNI.getText().trim(),
+            txtNombres.getText().trim(),
+            txtApellidos.getText().trim(),
+            cmbCarrera.getSelectedItem().toString(),
+            cmbCiclo.getSelectedItem().toString(),
+            cmbTurno.getSelectedItem().toString(),
+            "Activo"
+        );
+        
+        if (estudianteDAO.actualizar(est)) {
+            JOptionPane.showMessageDialog(this, "Estudiante actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatos();
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al actualizar estudiante", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnModificarEstudianteActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
@@ -209,34 +362,42 @@ public class VistaRegistroEstudiantes extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnMenuEstudianteActionPerformed
 
+    private void btnEliminarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEstudianteActionPerformed
+        if (txtID.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un estudiante de la tabla", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int respuesta = JOptionPane.showConfirmDialog(this,
+            "¿Está seguro de eliminar este estudiante?",
+            "Confirmar Eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (respuesta == JOptionPane.YES_OPTION) {
+            int id = Integer.parseInt(txtID.getText());
+            if (estudianteDAO.eliminar(id)) {
+                JOptionPane.showMessageDialog(this, "Estudiante eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarDatos();
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar estudiante", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarEstudianteActionPerformed
+
+    private void btnLimpiarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarEstudianteActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnLimpiarEstudianteActionPerformed
+
+    private void tablaEstudiantesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEstudiantesMouseClicked
+       cargarDatosEnCampos();
+    }//GEN-LAST:event_tablaEstudiantesMouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroEstudiantes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroEstudiantes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroEstudiantes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaRegistroEstudiantes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VistaRegistroEstudiantes().setVisible(true);
