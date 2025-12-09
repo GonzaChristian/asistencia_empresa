@@ -154,7 +154,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         btnMarcarAsistencia = new javax.swing.JButton();
         btnMarcarFalta = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscarPersonal = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -256,7 +256,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Fecha:");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 70, 40));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 270, 30));
+        getContentPane().add(txtBuscarPersonal, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 270, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -340,7 +340,7 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerFecha;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable table_personal;
+    private javax.swing.JTextField txtBuscarPersonal;
     // End of variables declaration//GEN-END:variables
 }
