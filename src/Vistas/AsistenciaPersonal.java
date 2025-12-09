@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class AsistenciaPersonal extends javax.swing.JFrame {
 
@@ -17,13 +19,9 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         asistenciaDAO = new AsistenciaDAO();
         inicializarTabla();
-        inicializarComponentes();
-        cargarDatos();
-    }
-    
-    private void inicializarComponentes() {
-        // Configurar fecha actual en el spinner
         jSpinnerFecha.setValue(new java.util.Date());
+        configurarBusqueda();
+        cargarDatos();
     }
     
     private void inicializarTabla() {
@@ -38,91 +36,63 @@ public class AsistenciaPersonal extends javax.swing.JFrame {
         table_personal.setModel(modeloTabla);
     }
     
+    // Configurar búsqueda en tiempo real
+    private void configurarBusqueda() {
+        txtBuscarPersonal.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { cargarDatos(); }
+            public void removeUpdate(DocumentEvent e) { cargarDatos(); }
+            public void changedUpdate(DocumentEvent e) { cargarDatos(); }
+        });
+    }
+    
     private void cargarDatos() {
-        limpiarTabla();
+        modeloTabla.setRowCount(0);
+        Date fecha = new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime());
+        String busqueda = txtBuscarPersonal.getText().trim();
         
-        // Obtener fecha seleccionada
-        java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
-        Date fechaSQL = new Date(fechaUtil.getTime());
-        
-        // Obtener personal con asistencia
-        List<Map<String, Object>> lista = asistenciaDAO.obtenerPersonalConAsistencia(fechaSQL);
+        List<Map<String, Object>> lista = busqueda.isEmpty() 
+            ? asistenciaDAO.obtenerPersonalConAsistencia(fecha)
+            : asistenciaDAO.buscarPersonal(fecha, busqueda);
         
         for (Map<String, Object> fila : lista) {
-            Object[] datos = {
+            modeloTabla.addRow(new Object[]{
                 fila.get("dni"),
                 fila.get("nombres"),
                 fila.get("apellidos"),
                 fila.get("cargo"),
                 fila.get("estado")
-            };
-            modeloTabla.addRow(datos);
+            });
         }
     }
     
-    private void limpiarTabla() {
-        while (modeloTabla.getRowCount() > 0) {
-            modeloTabla.removeRow(0);
-        }
-    }
-    
-    private void marcarAsistencia(String estadoAsistencia) {
-        int filaSeleccionada = table_personal.getSelectedRow();
-        
-        if (filaSeleccionada < 0) {
-            JOptionPane.showMessageDialog(this, 
-                "Seleccione un personal de la tabla", 
-                "Advertencia", 
-                JOptionPane.WARNING_MESSAGE);
+    private void marcarAsistencia(String estado) {
+        int fila = table_personal.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un personal", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        try {
-            // Obtener DNI del personal seleccionado
-            String dni = modeloTabla.getValueAt(filaSeleccionada, 0).toString();
-            
-            // Obtener ID del personal desde la base de datos
-            int idPersonal = obtenerIdPersonalPorDNI(dni);
-            
-            if (idPersonal == -1) {
-                JOptionPane.showMessageDialog(this, 
-                    "No se pudo obtener el ID del personal", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            // Obtener fecha seleccionada
-            java.util.Date fechaUtil = (java.util.Date) jSpinnerFecha.getValue();
-            Date fechaSQL = new Date(fechaUtil.getTime());
-            
-            // Registrar asistencia
-            if (asistenciaDAO.registrarAsistenciaPersonal(idPersonal, fechaSQL, estadoAsistencia)) {
-                JOptionPane.showMessageDialog(this, 
-                    "Asistencia marcada como: " + estadoAsistencia, 
-                    "Éxito", 
-                    JOptionPane.INFORMATION_MESSAGE);
-                cargarDatos(); // Recargar la tabla
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Error al registrar asistencia", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: " + e.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+        String dni = modeloTabla.getValueAt(fila, 0).toString();
+        int idPersonal = obtenerIdPorDNI(dni);
+        
+        if (idPersonal == -1) {
+            JOptionPane.showMessageDialog(this, "Error al obtener ID", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Date fecha = new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime());
+        
+        if (asistenciaDAO.registrarAsistenciaPersonal(idPersonal, fecha, estado)) {
+            JOptionPane.showMessageDialog(this, "Asistencia: " + estado, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    private int obtenerIdPersonalPorDNI(String dni) {
-        // Buscar el ID en la lista actual
-        List<Map<String, Object>> lista = asistenciaDAO.obtenerPersonalConAsistencia(
-            new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime())
-        );
+    private int obtenerIdPorDNI(String dni) {
+        Date fecha = new Date(((java.util.Date) jSpinnerFecha.getValue()).getTime());
+        List<Map<String, Object>> lista = asistenciaDAO.obtenerPersonalConAsistencia(fecha);
         
         for (Map<String, Object> fila : lista) {
             if (fila.get("dni").toString().equals(dni)) {
